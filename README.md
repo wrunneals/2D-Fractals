@@ -17,3 +17,4 @@ For instance the power 4 Mandelbrot can be expressed as ```z = z * z * z * z + c
 
 Other variations: 
 - The Burning Ship Fractal ```z = complex(math.abs(real(z)), math.abs(imag(z))) + c ```
+<img src="/res/Image2.png" alt="example" width=400 /> <br>
