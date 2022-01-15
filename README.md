@@ -3,6 +3,7 @@
 A fractal rendering program that is written in GO. Purpose of this project is to make a multi-threaded renderer that can make high resolution images for making wallpapers/posters/etc.
 
 <img src="/res/Image1.png" alt="example" width=400 /> <br>
+Image center (-0.761574 - 0.0847596i)
 
 ### Fractal Formulas
 
@@ -22,3 +23,4 @@ z = complex(math.Abs(real(z)), math.Abs(imag(z)))
 z = z * z + c 
 ```
 <img src="/res/Image2.png" alt="example" width=400 /> <br>
+Image center (-1.762 - 0.028i), Scale 0.1
