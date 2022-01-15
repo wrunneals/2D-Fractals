@@ -10,7 +10,7 @@ import(
 
 const resX int = 1920 * 4 //4k image
 const resY int = 1080 * 4
-const numWorkers = 50
+const numWorkers int = 50
 var aspectRatio float64 = float64(resX) / float64(resY)
 var scale float64 = 0.01
 var center complex128 = -0.761574 - 0.0847596i
@@ -87,7 +87,7 @@ func getPaletteColor(val float64) color.RGBA{
 		red := float64(c0.R) / 255.0 + dr * frac
 		green := float64(c0.B) / 255.0 + db * frac
 		blue := float64(c0.G) / 255.0 + dg * frac
-		return color.RGBA{uint8(red * 255.0), uint8(green * 255.0), uint8(blue * 255.0), 255}
+		return color.RGBA{uint8(math.Round(red * 255.0)), uint8(math.Round(green * 255.0)), uint8(math.Round(blue * 255.0)), 255}
 	}
 
 // =========================================================== Main =====================================================================
