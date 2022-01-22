@@ -16,7 +16,7 @@ for ; abs(z) < 2 && i < maxIter; i ++{
 This formula can be changed to produce different fractal images. \
 For instance the power 4 Mandelbrot can be expressed as ```z = z * z * z * z + c```.
 
-Other variations: 
+###### Other variations: 
 - The Burning Ship Fractal 
 ```
 z = complex(math.Abs(real(z)), math.Abs(imag(z)))
