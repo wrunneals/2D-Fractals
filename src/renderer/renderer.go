@@ -6,44 +6,81 @@ import(
 	"utils/palette"
 )
 
-const resX int32 = 400
-const resY int32 = 400
-var scale float64 = 2.0
-var center complex128 = 0 - 0i
-const numWorkers int32 = 50
+//======================================================================================
+//                                     CONFIG                                           
+//======================================================================================
+const numWorkers int = 50
+const resX int = 1920
+const resY int = 1080
+const maxIter int = 5000
+var scale float64 = 0.01
+var center complex128 = -0.761574 - 0.0847596i
 var aspectRatio float64 = float64(resX) / float64(resY)
+// =====================================================================================
 
 type PixelJob struct{
-	x int32
-	y int32
+	x int
+	y int
 }
 
 type PixelResult struct{
-	x int32
-	y int32
-	value float64
+	x int
+	y int
+	iter int
 }
 
 //Main function to be called from main to generate image
 func RenderImage() *image.RGBA{
-	const numJobs = resX * resY
+	hist := [maxIter + 1]int{}
+	iterCounts := [resX * resY]int{}
+	const numJobs int = resX * resY
 	imgOut := image.NewRGBA(image.Rectangle{image.Point{0, 0}, image.Point{int(resX), int(resY)}})
 	jobsChan := make(chan PixelJob, numJobs)
 	resultsChan := make(chan PixelResult, numJobs)
-	for i := int32(0); i < numWorkers; i ++{
+	for i := 0; i < numWorkers; i ++{
 		go worker(jobsChan, resultsChan)
 	}
-	for x := int32(0); x < resX; x ++{
-		for y := int32(0); y < resY; y ++{
+
+	// First pass to get iteration counts
+	for x := 0; x < resX; x ++{
+		for y := 0; y < resY; y ++{
 			jobsChan <- PixelJob{x, y}
 		}
 	}
 	close(jobsChan)
-	for i := int32(0); i < numJobs; i ++{
+	for i := 0; i < numJobs; i ++{
 		result := <- resultsChan
-		c := palette.GetPaletteColor(result.value)
-		imgOut.Set(int(result.x), int(result.y), c)
+		index := result.x + resX * result.y
+		iterCounts[index] = result.iter
+		hist[result.iter] ++
 	}
+
+	// Second pass to get a normalized histogram
+	runningTotal := [len(hist)]int{}
+	n := 0
+	for i := 0; i < len(hist); i ++{
+		n += hist[i]
+		runningTotal[i] = n
+	}
+
+	//Third pass to build image based on the normalized historgram value
+	for x := 0; x < resX; x ++{
+		for y := 0; y < resY; y ++{
+			i := flatten(x, y)
+			/*
+			val := 0.0
+			if iterCounts[i] == maxIter{
+				val = 1.0
+			} else{
+				val = float64(runningTotal[iterCounts[i]]) / float64(runningTotal[len(runningTotal) - 2])
+			}
+			*/
+			val := float64(iterCounts[i]) / float64(maxIter)
+			c := palette.GetPaletteColor(val)
+			imgOut.Set(x, y, c)
+		}
+	}
+
 	return imgOut
 }
 
@@ -55,21 +92,25 @@ func worker(jobs <-chan PixelJob, results chan <- PixelResult){
 	}
 }
 
+// Flattens a 2D array
+func flatten(x, y int) int{
+	return x + resX * y
+}
+
 // Maps a pixel to a point on the complex plane given a center and view
-func mapPixel(x, y int32) complex128{
+func mapPixel(x, y int) complex128{
 	r := (real(center) - scale * aspectRatio / 2.0) + float64(x) / float64(resX) * scale * aspectRatio
 	i := (imag(center) - scale / 2.0) + float64(y) / float64(resY) * scale
 	return complex(r, i)
 }
 
 //Iterates over z = z^2 + c and returns the escape value given a pixel point (x, y)
-func iteratePixel(x, y int32) float64{
-	maxIter := 256
+func iteratePixel(x, y int) int{
 	z := 0 + 0i
 	c := mapPixel(x, y)
 	i := 0
-	for ; cmplx.Abs(z) < 2.0 && i < maxIter; i ++{
+	for ; cmplx.Abs(z) < 1024.0 && i < maxIter; i ++{
 		z = z * z + c
 	}
-	return float64(i) / float64(maxIter)
+	return i
 }
