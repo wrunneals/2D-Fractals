@@ -16,6 +16,12 @@ for ; abs(z) < 2 && i < maxIter; i ++{
 This formula can be changed to produce different fractal images. \
 For instance the power 4 Mandelbrot can be expressed as ```z = z * z * z * z + c```.
 
+### Coloring Algorithm
+
+Program currently uses a histogram coloring approach to normalize the image. Escape time coloring can also be swapped in fairly easily
+
+<img src="/res/Image1.png" alt="example" width=400 /> <br>
+
 ###### Other variations: 
 - The Burning Ship Fractal 
 ```

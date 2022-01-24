@@ -33,11 +33,10 @@ var palette [16]color.RGBA = [16]color.RGBA{
 func GetPaletteColor(val float64) color.RGBA{
 	if val == 1.0{
 		return setColor
-	}	
-	val = math.Pow(val, 0.3)
-	index := int(val * float64(len(palette)))
-	/*
-	frac := (val * float64(len(palette))) - float64(index)
+	}
+	val = math.Pow(val, 2)	
+	index := int(val * float64(len(palette) - 1))
+	frac := (val * float64(len(palette) - 1)) - float64(index)
 	next := index + 1
 	if next >= len(palette){
 		next = 0
@@ -48,11 +47,9 @@ func GetPaletteColor(val float64) color.RGBA{
 	dg := float64(c1.G) / 255.0 - float64(c0.G) / 255.0
 	db := float64(c1.B) / 255.0 - float64(c0.B) / 255.0
 	red := float64(c0.R) / 255.0 + dr * frac
-	green := float64(c0.B) / 255.0 + db * frac
-	blue := float64(c0.G) / 255.0 + dg * frac
+	green := float64(c0.G) / 255.0 + dg * frac
+	blue := float64(c0.B) / 255.0 + db * frac
 	return color.RGBA{uint8(math.Round(red * 255.0)), uint8(math.Round(green * 255.0)), uint8(math.Round(blue * 255.0)), 255}
-	*/
-	return palette[index]
 }
 
 // ===============================================================================

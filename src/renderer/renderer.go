@@ -10,9 +10,9 @@ import(
 //                                     CONFIG                                           
 //======================================================================================
 const numWorkers int = 50
-const resX int = 1920
-const resY int = 1080
-const maxIter int = 5000
+const resX int = 1920 * 4
+const resY int = 1080 * 4
+const maxIter int = 50000
 var scale float64 = 0.01
 var center complex128 = -0.761574 - 0.0847596i
 var aspectRatio float64 = float64(resX) / float64(resY)
@@ -29,58 +29,62 @@ type PixelResult struct{
 	iter int
 }
 
-//Main function to be called from main to generate image
+//Main function to be called to generate the image.
 func RenderImage() *image.RGBA{
-	hist := [maxIter + 1]int{}
-	iterCounts := [resX * resY]int{}
-	const numJobs int = resX * resY
 	imgOut := image.NewRGBA(image.Rectangle{image.Point{0, 0}, image.Point{int(resX), int(resY)}})
+
+	// Create worker threads
+	const numJobs int = resX * resY
+	iterCounts := [resX * resY]int{}
 	jobsChan := make(chan PixelJob, numJobs)
 	resultsChan := make(chan PixelResult, numJobs)
 	for i := 0; i < numWorkers; i ++{
 		go worker(jobsChan, resultsChan)
 	}
 
-	// First pass to get iteration counts
+	// Assign workers jobs
 	for x := 0; x < resX; x ++{
 		for y := 0; y < resY; y ++{
 			jobsChan <- PixelJob{x, y}
 		}
 	}
 	close(jobsChan)
+	// Start Rendering
+
+	// First pass to build histogram/store iteration counts from workers
+	total := 0
+	hist := [maxIter]int{}
 	for i := 0; i < numJobs; i ++{
 		result := <- resultsChan
-		index := result.x + resX * result.y
+		index := flatten(result.x, result.y)
 		iterCounts[index] = result.iter
-		hist[result.iter] ++
+		if result.iter < maxIter{
+			hist[result.iter] ++
+			total ++
+		}
 	}
 
-	// Second pass to get a normalized histogram
-	runningTotal := [len(hist)]int{}
-	n := 0
-	for i := 0; i < len(hist); i ++{
-		n += hist[i]
-		runningTotal[i] = n
+	// Second pass to get totals
+	runTotals := [maxIter]int{}
+	runTotals[0] = hist[0]
+	for i := 1; i < maxIter; i ++{
+		runTotals[i] = hist[i] + runTotals[i - 1]
 	}
 
-	//Third pass to build image based on the normalized historgram value
+	// Third pass to generate image
 	for x := 0; x < resX; x ++{
 		for y := 0; y < resY; y ++{
 			i := flatten(x, y)
-			/*
 			val := 0.0
 			if iterCounts[i] == maxIter{
 				val = 1.0
 			} else{
-				val = float64(runningTotal[iterCounts[i]]) / float64(runningTotal[len(runningTotal) - 2])
+				val = float64(runTotals[iterCounts[i]]) / float64(total)
 			}
-			*/
-			val := float64(iterCounts[i]) / float64(maxIter)
 			c := palette.GetPaletteColor(val)
 			imgOut.Set(x, y, c)
 		}
 	}
-
 	return imgOut
 }
 
