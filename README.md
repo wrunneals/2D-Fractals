@@ -20,7 +20,7 @@ For instance the power 4 Mandelbrot can be expressed as ```z = z * z * z * z + c
 
 Program currently uses a histogram coloring approach to normalize the image. Escape time coloring can also be swapped in fairly easily
 
-<img src="/res/Image1.png" alt="example" width=400 /> <br>
+<img src="/res/Image3.png" alt="example" width=400 /> <br>
 
 ###### Other variations: 
 - The Burning Ship Fractal 
