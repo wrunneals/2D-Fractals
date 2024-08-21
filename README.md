@@ -2,8 +2,7 @@
 
 A fractal rendering program that is written in GO. Purpose of this project is to make a multi-threaded renderer that can make high resolution images for making wallpapers/posters/etc.
 
-<img src="/res/Image1.png" alt="example" width=400 /> <br>
-Image center (-0.761574 - 0.0847596i)
+<img src="/res/RedWhite.png" alt="example" width=400 /> <br>
 
 ### Fractal Formulas
 
