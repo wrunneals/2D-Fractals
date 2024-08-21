@@ -6,17 +6,13 @@ import(
 	"utils/palette"
 )
 
-//======================================================================================
-//                                     CONFIG                                           
-//======================================================================================
-const numWorkers int = 50
+const numWorkers int = 22
 const resX int = 1920 * 4
 const resY int = 1080 * 4
 const maxIter int = 50000
-var scale float64 = 0.01
-var center complex128 = -0.761574 - 0.0847596i
-var aspectRatio float64 = float64(resX) / float64(resY)
-// =====================================================================================
+var scale float64
+var center complex128
+var aspectRatio float64
 
 type PixelJob struct{
 	x int
@@ -30,8 +26,11 @@ type PixelResult struct{
 }
 
 //Main function to be called to generate the image.
-func RenderImage() *image.RGBA{
+func RenderImage(s float64, c complex128) *image.RGBA{
 	imgOut := image.NewRGBA(image.Rectangle{image.Point{0, 0}, image.Point{int(resX), int(resY)}})
+	aspectRatio = float64(resX) / float64(resY)
+	scale = s
+	center = c
 
 	// Create worker threads
 	const numJobs int = resX * resY

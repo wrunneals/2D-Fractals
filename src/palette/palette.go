@@ -8,7 +8,8 @@ import (
 
 var setColor color.RGBA = color.RGBA{0, 0, 0, 255}
 
-var palette [16]color.RGBA = [16]color.RGBA{
+var palette []color.RGBA = []color.RGBA{
+		/*
 		color.RGBA{60, 30, 15, 255},
 		color.RGBA{25, 7, 26, 255},
 		color.RGBA{9, 1, 47, 255},
@@ -27,6 +28,15 @@ var palette [16]color.RGBA = [16]color.RGBA{
 		color.RGBA{204, 128, 0, 255},
 		color.RGBA{153, 87, 0, 255},
 		color.RGBA{106, 52, 3, 255},
+		*/
+
+		color.RGBA{255, 255, 255, 255},
+		color.RGBA{255, 127, 127, 255},
+		color.RGBA{140, 40, 40, 255},
+		color.RGBA{40, 5, 5, 255},
+		color.RGBA{80, 5, 5, 255},
+		color.RGBA{255, 10, 10, 255},
+		color.RGBA{10, 10, 10, 255},
 }
 
 // returns a color by lerping through a palette of colors based on a parameter value
