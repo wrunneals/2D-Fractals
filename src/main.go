@@ -7,12 +7,10 @@ import(
 	"utils/renderer"
 )
 
-var center complex128 = -0.1048976440 + 0.9278883362i
-
 func main(){
 	frames := 1
-	scale := 1.5625e-06
-	center := -0.1048976440 + 0.9278883362i
+	scale := 0.000375
+	center := -0.749348806 + 0.038702074i
 	for i := 0; i < frames; i++{
 		imgOut := renderer.RenderImage(scale, center)
 		f, _ := os.Create(fmt.Sprintf("../output%d.png", i))
@@ -21,4 +19,3 @@ func main(){
 		scale = scale / 2.0
 	}
 }
-

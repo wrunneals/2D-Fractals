@@ -7,9 +7,10 @@ import(
 )
 
 const numWorkers int = 22
+const coloringMode string = "escape"
 const resX int = 1920 * 4
 const resY int = 1080 * 4
-const maxIter int = 50000
+const maxIter int = 15000
 var scale float64
 var center complex128
 var aspectRatio float64
@@ -50,7 +51,7 @@ func RenderImage(s float64, c complex128) *image.RGBA{
 	close(jobsChan)
 	// Start Rendering
 
-	// First pass to build histogram/store iteration counts from workers
+	// First pass to store iteration counts from workers
 	total := 0
 	hist := [maxIter]int{}
 	for i := 0; i < numJobs; i ++{
@@ -63,14 +64,14 @@ func RenderImage(s float64, c complex128) *image.RGBA{
 		}
 	}
 
-	// Second pass to get totals
+	// Second pass to get totals for histogram
 	runTotals := [maxIter]int{}
 	runTotals[0] = hist[0]
 	for i := 1; i < maxIter; i ++{
 		runTotals[i] = hist[i] + runTotals[i - 1]
 	}
 
-	// Third pass to generate image
+	// Third pass to generate/color image
 	for x := 0; x < resX; x ++{
 		for y := 0; y < resY; y ++{
 			i := flatten(x, y)
@@ -80,8 +81,13 @@ func RenderImage(s float64, c complex128) *image.RGBA{
 			} else{
 				val = float64(runTotals[iterCounts[i]]) / float64(total)
 			}
-			c := palette.GetPaletteColor(val)
-			imgOut.Set(x, y, c)
+			if coloringMode == "escape"{
+				c := palette.GetEscapeColor(float64(iterCounts[i]) / float64(maxIter))
+				imgOut.Set(x, y, c)
+			} else{ // histogram
+				c := palette.GetPaletteColor(val)
+				imgOut.Set(x, y, c)
+			}
 		}
 	}
 	return imgOut
@@ -107,7 +113,7 @@ func mapPixel(x, y int) complex128{
 	return complex(r, i)
 }
 
-//Iterates over z = z^2 + c and returns the escape value given a pixel point (x, y)
+//Iterates over fractal formula and returns the escape value given a pixel point (x, y)
 func iteratePixel(x, y int) int{
 	z := 0 + 0i
 	c := mapPixel(x, y)

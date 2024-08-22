@@ -30,13 +30,8 @@ var palette []color.RGBA = []color.RGBA{
 		color.RGBA{106, 52, 3, 255},
 		*/
 
+		color.RGBA{0, 0, 0, 255},
 		color.RGBA{255, 255, 255, 255},
-		color.RGBA{255, 127, 127, 255},
-		color.RGBA{140, 40, 40, 255},
-		color.RGBA{40, 5, 5, 255},
-		color.RGBA{80, 5, 5, 255},
-		color.RGBA{255, 10, 10, 255},
-		color.RGBA{10, 10, 10, 255},
 }
 
 // returns a color by lerping through a palette of colors based on a parameter value
@@ -60,6 +55,15 @@ func GetPaletteColor(val float64) color.RGBA{
 	green := float64(c0.G) / 255.0 + dg * frac
 	blue := float64(c0.B) / 255.0 + db * frac
 	return color.RGBA{uint8(math.Round(red * 255.0)), uint8(math.Round(green * 255.0)), uint8(math.Round(blue * 255.0)), 255}
+}
+
+//Returns raw escape value as color
+func GetEscapeColor(val float64) color.RGBA{
+	if val == 1.0{
+		return setColor
+	}
+	val = math.Pow(val, 0.35) //gamma correction
+	return color.RGBA{uint8(math.Round(val * 255.0)), uint8(math.Round(val * 255.0)), uint8(math.Round(val * 255.0)), 255}
 }
 
 // ===============================================================================
