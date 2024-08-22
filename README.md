@@ -2,7 +2,7 @@
 
 A work in progress project for generating high resolution 2D fractal images using GO. Aim was to create a program that can efficiently render high resolution images that I can use to make wallpapers or posters while still allowing me the freedom to test new code/fractals without much effort. I decided to use GO for this project for it's powerful concurrency and native image package.
 
-<img src="/res/RedWhite.png" alt="example" width=800 /> <br>
+<img src="/res/RedWhite.png" alt="example" width=1000 /> <br>
 
 ## Getting Started
 Program is currently just three files:
