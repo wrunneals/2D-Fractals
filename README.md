@@ -31,4 +31,4 @@ Formula:
 z = complex(math.Abs(real(z)), math.Abs(imag(z)))
 z = z * z + c 
 ```
-<img src="/res/Image2.png" alt="example" width=400 /> <br>
+<img src="/res/Image2.png" alt="example" width=800 /> <br>
