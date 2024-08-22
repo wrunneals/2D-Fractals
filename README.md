@@ -4,7 +4,7 @@ A work in progress project for generating high resolution 2D fractal images usin
 
 <img src="/res/RedWhite.png" alt="example" width=1000 /> <br>
 
-## Getting Started
+## Rendering
 Program is currently just three files:
 - main.go - Main file that handles image IO and calls to renderer.go
 - renderer.go - Rendering logic for fractal generation and handles dispatching go workers.
