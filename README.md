@@ -22,7 +22,7 @@ This formula can be changed to produce different types of fractals (See 'Other V
 
 Program currently uses a histogram coloring algorithm to normalize the image coloring at various scales/depth. Escape time coloring can also be used for testing but is not ideal for creating interesting images.
 
-<img src="/res/sunbrot.png" alt="example" width=400 /> <br>
+<img src="/res/sunbrot.png" alt="example" width=600 /> <br>
 
 ## Other variations: 
 #### The Burning Ship Fractal 
