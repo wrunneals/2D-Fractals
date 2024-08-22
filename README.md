@@ -20,7 +20,7 @@ This formula can be changed to produce different types of fractals (See 'Other V
 
 ## Coloring Algorithm
 
-Program currently uses a histogram coloring algorithm to normalize the image coloring at various scales/depth. Escape time coloring can also be used for testing but is not ideal for creating interesting images.
+Program currently uses a histogram coloring algorithm to normalize the image coloring at various scales/depths. Escape time coloring can also be used for testing but is not ideal for creating interesting images.
 
 <img src="/res/sunbrot.png" alt="example" width=800 /> <br>
 
