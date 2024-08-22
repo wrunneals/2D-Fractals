@@ -18,7 +18,7 @@ for ; abs(z) < 2 && i < maxIter; i ++{
 ```
 This formula can be changed to produce different types of fractals (See 'Other Variations').
 
-## Coloring Algorithm
+## Coloring
 
 Program currently uses a histogram coloring algorithm to normalize the image coloring at various scales/depths. Escape time coloring can also be used for testing but is not ideal for creating interesting images.
 
