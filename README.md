@@ -16,7 +16,7 @@ for ; abs(z) < 2 && i < maxIter; i ++{
         z = z * z + c
 }
 ```
-This formula can be changed to produce different types of fractals (See 'Other Variations' for formulas).
+This formula can be changed to produce different types of fractals (See 'Other Variations').
 
 ## Coloring Algorithm
 
